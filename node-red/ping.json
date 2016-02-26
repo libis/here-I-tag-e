@@ -1,4 +1,107 @@
 [{
+  "id": "ebecbc3a.b8db68",
+  "type": "mongodb2",
+  "z": "7b5a2ff1.d98e38",
+  "uri": "mongodb://10.32.32.97:27027/heritage_development",
+  "name": "KRIS",
+  "options": "",
+  "parallelism": "-1"
+}, {
+  "id": "4cdd96f5.16ffe",
+  "type": "mqtt-broker",
+  "z": "7b5a2ff1.d98e38",
+  "broker": "www.celik.be",
+  "port": "1883",
+  "clientid": "",
+  "usetls": false,
+  "verifyservercert": true,
+  "compatmode": true,
+  "keepalive": "60",
+  "cleansession": true,
+  "willTopic": "",
+  "willQos": "0",
+  "willRetain": null,
+  "willPayload": "",
+  "birthTopic": "",
+  "birthQos": "0",
+  "birthRetain": null,
+  "birthPayload": ""
+}, {
+  "id": "84e62127.39ec68",
+  "type": "mqtt in",
+  "z": "7b5a2ff1.d98e38",
+  "name": "PING",
+  "topic": "/heritage/PING",
+  "broker": "4cdd96f5.16ffe",
+  "x": 61.5,
+  "y": 32.5,
+  "wires": [
+    ["4d5198f7.41e528"]
+  ]
+}, {
+  "id": "1ba69bf5.c41bc4",
+  "type": "mqtt out",
+  "z": "7b5a2ff1.d98e38",
+  "name": "OUT",
+  "topic": "",
+  "qos": "1",
+  "retain": "true",
+  "broker": "4cdd96f5.16ffe",
+  "x": 359.5,
+  "y": 371,
+  "wires": []
+}, {
+  "id": "bf7e8560.ab35c",
+  "type": "debug",
+  "z": "7b5a2ff1.d98e38",
+  "name": "",
+  "active": true,
+  "console": "false",
+  "complete": "false",
+  "x": 679.5,
+  "y": 234,
+  "wires": []
+}, {
+  "id": "4d5198f7.41e528",
+  "type": "json",
+  "z": "7b5a2ff1.d98e38",
+  "name": "",
+  "x": 185.5,
+  "y": 33.5,
+  "wires": [
+    ["ffabbff4.f58a"]
+  ]
+}, {
+  "id": "30b37b9c.d216a4",
+  "type": "inject",
+  "z": "7b5a2ff1.d98e38",
+  "name": "PING train station",
+  "topic": "/heritage/PING",
+  "payload": "[50.881264, 4.715634]",
+  "payloadType": "json",
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "x": 142.5,
+  "y": 340.5,
+  "wires": [
+    ["1ba69bf5.c41bc4"]
+  ]
+}, {
+  "id": "b6f9ca8b.7a4b1",
+  "type": "mongodb2 in",
+  "z": "7b5a2ff1.d98e38",
+  "service": "_ext_",
+  "configNode": "ebecbc3a.b8db68",
+  "name": "KRIS",
+  "collection": "pois",
+  "operation": "",
+  "x": 227.5,
+  "y": 130.5,
+  "wires": [
+    ["76c054d.5a0e72c"]
+  ]
+}, {
   "id": "ffabbff4.f58a",
   "type": "function",
   "z": "7b5a2ff1.d98e38",
@@ -10,5 +113,44 @@
   "y": 129.5,
   "wires": [
     ["b6f9ca8b.7a4b1"]
+  ]
+}, {
+  "id": "21e88201.9c526e",
+  "type": "inject",
+  "z": "7b5a2ff1.d98e38",
+  "name": "DATA",
+  "topic": "/heritage/DATA",
+  "payload": "[ { \"title\": \"Gebouw\", \"id\": 1 },     { \"title\": \"Museum\", \"id\": 2 },     { \"title\": \"Monument2\", \"id\": 3 }   ]",
+  "payloadType": "json",
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "x": 103.5,
+  "y": 410.5,
+  "wires": [
+    ["1ba69bf5.c41bc4"]
+  ]
+}, {
+  "id": "76c054d.5a0e72c",
+  "type": "function",
+  "z": "7b5a2ff1.d98e38",
+  "name": "format",
+  "func": "if (msg.payload.length > 0) {\n    var data = msg.payload;\n    var result = [];\n    \n    data.forEach(function(el, i, arr){\n        result.push({id: el._id, \n        title: el.metadata.title.join(', '), \n        latLon: el.metadata.lbsLatLon, \n        thumbnail: el.metadata.edmPreview[0] || ''});\n    });\n}\n\nmsg.payload = result;\nmsg.topic = '/heritage/DATA';\nreturn msg;",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 368.5,
+  "y": 130.5,
+  "wires": [
+    ["686d767e.1507a8"]
+  ]
+}, {
+  "id": "686d767e.1507a8",
+  "type": "json",
+  "z": "7b5a2ff1.d98e38",
+  "name": "",
+  "x": 539.5,
+  "y": 152,
+  "wires": [
+    ["1ba69bf5.c41bc4"]
   ]
 }]
