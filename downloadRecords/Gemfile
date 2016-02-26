@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+gem 'nokogiri'
+gem 'nori'
+gem 'gyoku'
+gem 'europeana-api'
+gem 'geocoder'
+gem 'multi_json'
+gem 'activesupport'
