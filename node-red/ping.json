@@ -1,0 +1,14 @@
+[{
+  "id": "ffabbff4.f58a",
+  "type": "function",
+  "z": "7b5a2ff1.d98e38",
+  "name": "Query",
+  "func": "var latLon = msg.payload;\nvar newMsg = {};\nnewMsg.operation  = 'find.toArray';\nnewMsg.payload    = {location: {\n          $near: {\n             $geometry: {\n                type: \"Point\" ,\n                coordinates: latLon\n             },\n             $maxDistance: 100,\n             $minDistance: 0\n          }\n        }\n};\n\nreturn newMsg;\n",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 84.5,
+  "y": 129.5,
+  "wires": [
+    ["b6f9ca8b.7a4b1"]
+  ]
+}]
