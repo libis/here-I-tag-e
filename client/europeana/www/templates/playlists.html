@@ -1,17 +1,17 @@
-<ion-view view-title="Nearby locations">    
+<ion-view view-title="Nearby locations">
   <ion-content class="locations scroll-bg">
     <ion-list>
       <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}" class="item-icon-right loc-list item-thumbnail-left">
-                 
-        <img src="http://getuikit.com/docs/images/placeholder_600x400.svg">
+
+        <img src="{{playlist.thumbnail}}">
         <h2>{{playlist.title}}</h2>
-         
+
         <ul>
-            <li><i class="ion-pricetags"></i> tags</li>  
+            <li><i class="ion-pricetags"></i> tags</li>
             <li><i class="ion-map"></i> 2.3 km / you are here</li>
-        </ul> 
-        <i class="icon ion-android-locate"></i> 
-        <!--<i class="icon ion-android-image"></i>-->  
+        </ul>
+        <i class="icon ion-android-locate"></i>
+        <!--<i class="icon ion-android-image"></i>-->
       </ion-item>
     </ion-list>
   </ion-content>

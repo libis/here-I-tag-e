@@ -42,29 +42,69 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Gebouw', id: 1 },
-    { title: 'Museum', id: 2 },
-    { title: 'Monument', id: 3 }
-  ];
+  $scope.playlists = [];
+  $scope.clientId = "clientId-123";
+  var sendPosition = function(position){
+    p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
+    message = new Paho.MQTT.Message(p);
+    message.destinationName = "/heritage/PING";
+    mqttClient.send(message);
+  };
+
+
+  var mqttClient = new Paho.MQTT.Client("88.198.207.11", 10001, $scope.clientId);
+
+  mqttClient.onConnectionLost =  function(responseObject) {
+    if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost:" + responseObject.errorMessage);
+      console.log("Reconnecting... [" + new Date() + "]");
+      mqttClient.connect({
+        userName:'heritage',
+        password: 'Nc7gmYGx',
+        onSuccess: function() {
+          mqttClient.subscribe("/heritage/DATA");
+          navigator.geolocation.getCurrentPosition(sendPosition);
+        }
+      });
+    }
+  };
+
+  mqttClient.onMessageArrived = function(message) {
+    $scope.$apply(function() {
+      $scope.playlists = JSON.parse(message.payloadString);
+    });
+  };
+
+  mqttClient.connect({
+    userName:'heritage',
+    password: 'Nc7gmYGx',
+
+    onSuccess: function() {
+      mqttClient.subscribe("/heritage/DATA");
+      navigator.geolocation.getCurrentPosition(sendPosition);
+    }
+  });
+
+
+
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+})
 
-exampleApp.controller('MapController', function($scope, $ionicLoading) {
- 
+.controller('MapController', function($scope, $ionicLoading) {
+
     google.maps.event.addDomListener(window, 'load', function() {
         var myLatlng = new google.maps.LatLng(37.3000, -120.4833);
- 
+
         var mapOptions = {
             center: myLatlng,
             zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
- 
+
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
- 
+
         navigator.geolocation.getCurrentPosition(function(pos) {
             map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
             var myLocation = new google.maps.Marker({
@@ -73,9 +113,9 @@ exampleApp.controller('MapController', function($scope, $ionicLoading) {
                 title: "My Location"
             });
         });
- 
+
         $scope.map = map;
     });
- 
+
 });
 
