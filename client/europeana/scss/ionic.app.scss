@@ -1,0 +1,79 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+*/
+
+$light:                           #fff !default;
+$stable:                          #e3f2fd !default;
+$positive:                        #bbdefb !default;
+$calm:                            #42a5f5 !default;
+$balanced:                        #2196f3 !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #f50057 !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+@import "custom.scss";
+
+.button .icon::before, .button.icon::before, .button.icon-left::before, .button.icon-right::before {
+    font-size:16px;
+    line-height:26px;
+}
+
+.scroll-bg {
+    background: url("../img/photography.png");
+    
+}
+
+.loc-list .icon{
+    font-size:100%;
+    margin-right:0px;
+} 
+
+.profile{
+    label{
+        margin-bottom:0.5em;        
+        background:$light;
+        border:none;
+        border-bottom:1px solid $stable;
+    }
+}
+
+.locations{
+    .loc-list{
+        margin:0.5em 0.5em 0 0.5em;
+        background:none;
+        border:none;
+        border-bottom:1px solid $stable;
+    }
+
+    .item-content{
+        
+    }
+
+    ul{
+        font-size:90%;
+    }
+
+    .icon{
+        font-size:200%;
+        lineheight: 120%;
+        color:$calm;
+    }
+}
+
+ion-content.location{
+    img{
+        width:100%;  
+    }
+}
+
+

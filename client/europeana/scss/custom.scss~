@@ -1,0 +1,25 @@
+.list .icon{
+    font-size:120%;
+} 
+
+.menu{
+    background:$balanced;
+    color:$light;
+}
+
+.list .icon{
+    font-size:110%;
+    margin-right:10px;
+} 
+
+.item-thumbnail-left, .item-thumbnail-left .item-content {
+   padding-top: 16px;
+}
+
+.button .icon::before{
+    font-size:20px;
+}
+
+.nav-button{
+    border-radius:50%;
+}

@@ -1,0 +1,5 @@
+<ion-view view-title="Map">    
+  <ion-content class="locations scroll-bg">
+    
+  </ion-content>
+</ion-view>
