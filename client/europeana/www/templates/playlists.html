@@ -8,7 +8,12 @@
 
         <ul>
             <li><i class="ion-pricetags"></i> tags</li>
-            <li><i class="ion-map"></i> 2.3 km / you are here</li>
+            <li><i class="ion-map"></i>
+              <span ng-repeat="(key, latlon) in playlist.latLon">
+                <span>{{key}}: {{latlon.join(', ')}}</span>
+                <span ng-if="!$last">, </span>
+              </span>
+            </li>
         </ul>
         <i class="icon ion-android-locate"></i>
         <!--<i class="icon ion-android-image"></i>-->

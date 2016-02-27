@@ -57,7 +57,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
           controller: 'PlaylistsCtrl'
         }
       }
-    })  
+    })
 
   .state('app.single', {
     url: '/playlists/:playlistId',
@@ -70,4 +70,61 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
-});
+})
+  .factory('mqttService', ["$rootScope", 'settings', function($rootScope, settings) {
+    var service = {
+      mqtt:null,
+      setup: function(clientId, scope){
+        var that = this;
+        //this.mqtt = new Paho.MQTT.Client(settings.mqtt.adres, settings.mqtt.port, clientId);
+        this.mqtt = new Paho.MQTT.Client(settings.mqtt.adress, settings.mqtt.port, clientId);
+        this.mqtt.onConnectionLost =  function(responseObject) {
+          if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+            console.log("Reconnecting... [" + new Date() + "]");
+            that.mqtt.connect({
+              userName:'heritage',
+              password: 'Nc7gmYGx',
+              onSuccess: function() {
+                that.mqtt.subscribe("/heritage/DATA");
+                navigator.geolocation.getCurrentPosition(that.sendPosition);
+              }
+            });
+          }
+        };
+
+        this.mqtt.onMessageArrived = function(message) {
+          $rootScope.$apply(function() {
+            that.playLists = JSON.parse(message.payloadString);
+            scope.playlists = that.playLists;
+          });
+          console.log(message.payloadString);
+        };
+
+        this.mqtt.connect({
+          userName:'heritage',
+          password: 'Nc7gmYGx',
+
+          onSuccess: function() {
+            that.mqtt.subscribe("/heritage/DATA");
+            navigator.geolocation.getCurrentPosition(that.sendPosition);
+          }
+        });
+
+      },
+      playLists:[],
+      sendPosition: function(position){
+        p = JSON.stringify([50.878092, 4.699323]);
+        //p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
+        message = new Paho.MQTT.Message(p);
+        message.destinationName = "/heritage/PING";
+        service.mqtt.send(message);
+      }
+    };
+
+    return service;
+  }])
+
+  .constant('settings', {
+    'mqtt': {'adress': '88.198.207.11', 'port':10001}
+  });

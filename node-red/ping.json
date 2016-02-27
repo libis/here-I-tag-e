@@ -1,15 +1,15 @@
 [{
-  "id": "ebecbc3a.b8db68",
+  "id": "37f69c7d.fb3ea4",
   "type": "mongodb2",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "uri": "mongodb://10.32.32.97:27027/heritage_development",
   "name": "KRIS",
   "options": "",
   "parallelism": "-1"
 }, {
-  "id": "4cdd96f5.16ffe",
+  "id": "8c2c2c81.e1cdc8",
   "type": "mqtt-broker",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "broker": "www.celik.be",
   "port": "1883",
   "clientid": "",
@@ -27,54 +27,54 @@
   "birthRetain": null,
   "birthPayload": ""
 }, {
-  "id": "84e62127.39ec68",
+  "id": "b160d0e5.622fa",
   "type": "mqtt in",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "PING",
   "topic": "/heritage/PING",
-  "broker": "4cdd96f5.16ffe",
-  "x": 61.5,
-  "y": 32.5,
+  "broker": "8c2c2c81.e1cdc8",
+  "x": 94,
+  "y": 66,
   "wires": [
-    ["4d5198f7.41e528"]
+    ["35c17ec9.cd1ef2"]
   ]
 }, {
-  "id": "1ba69bf5.c41bc4",
+  "id": "c335d947.bdbee",
   "type": "mqtt out",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "OUT",
   "topic": "",
   "qos": "1",
   "retain": "true",
-  "broker": "4cdd96f5.16ffe",
-  "x": 359.5,
-  "y": 371,
+  "broker": "8c2c2c81.e1cdc8",
+  "x": 392,
+  "y": 404.5,
   "wires": []
 }, {
-  "id": "bf7e8560.ab35c",
+  "id": "c9675020.791b8",
   "type": "debug",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "",
   "active": true,
   "console": "false",
   "complete": "false",
-  "x": 679.5,
-  "y": 234,
+  "x": 712,
+  "y": 267.5,
   "wires": []
 }, {
-  "id": "4d5198f7.41e528",
+  "id": "35c17ec9.cd1ef2",
   "type": "json",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "",
-  "x": 185.5,
-  "y": 33.5,
+  "x": 218,
+  "y": 67,
   "wires": [
-    ["ffabbff4.f58a"]
+    ["eba885a1.87c39", "c9675020.791b8"]
   ]
 }, {
-  "id": "30b37b9c.d216a4",
+  "id": "bf9663cb.50efd",
   "type": "inject",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "PING train station",
   "topic": "/heritage/PING",
   "payload": "[50.881264, 4.715634]",
@@ -82,42 +82,42 @@
   "repeat": "",
   "crontab": "",
   "once": false,
-  "x": 142.5,
-  "y": 340.5,
+  "x": 175,
+  "y": 374,
   "wires": [
-    ["1ba69bf5.c41bc4"]
+    ["c335d947.bdbee"]
   ]
 }, {
-  "id": "b6f9ca8b.7a4b1",
+  "id": "d8efb97f.e6cff8",
   "type": "mongodb2 in",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "service": "_ext_",
-  "configNode": "ebecbc3a.b8db68",
+  "configNode": "37f69c7d.fb3ea4",
   "name": "KRIS",
   "collection": "pois",
   "operation": "",
-  "x": 227.5,
-  "y": 130.5,
+  "x": 260,
+  "y": 164,
   "wires": [
-    ["76c054d.5a0e72c"]
+    ["cd23006e.d290a8"]
   ]
 }, {
-  "id": "ffabbff4.f58a",
+  "id": "eba885a1.87c39",
   "type": "function",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "Query",
-  "func": "var latLon = msg.payload;\nvar newMsg = {};\nnewMsg.operation  = 'find.toArray';\nnewMsg.payload    = {location: {\n          $near: {\n             $geometry: {\n                type: \"Point\" ,\n                coordinates: latLon\n             },\n             $maxDistance: 100,\n             $minDistance: 0\n          }\n        }\n};\n\nreturn newMsg;\n",
+  "func": "var latLon = msg.payload;\nvar newMsg = {};\nnewMsg.operation  = 'find.toArray';\nnewMsg.payload    = {\n  location: {\n    $near: {\n      $geometry: {\n        type: \"Point\",\n        coordinates: latLon\n      },\n      $maxDistance: 100\n    }\n  }\n}, {\n  id: 1,\n  name: 1,\n  location: 1,\n  preview: 1\n};\n\nreturn newMsg;\n",
   "outputs": 1,
   "noerr": 0,
-  "x": 84.5,
-  "y": 129.5,
+  "x": 117,
+  "y": 163,
   "wires": [
-    ["b6f9ca8b.7a4b1"]
+    ["d8efb97f.e6cff8"]
   ]
 }, {
-  "id": "21e88201.9c526e",
+  "id": "eae9f72.d9ec208",
   "type": "inject",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "DATA",
   "topic": "/heritage/DATA",
   "payload": "[ { \"title\": \"Gebouw\", \"id\": 1 },     { \"title\": \"Museum\", \"id\": 2 },     { \"title\": \"Monument2\", \"id\": 3 }   ]",
@@ -125,32 +125,48 @@
   "repeat": "",
   "crontab": "",
   "once": false,
-  "x": 103.5,
-  "y": 410.5,
+  "x": 136,
+  "y": 444,
   "wires": [
-    ["1ba69bf5.c41bc4"]
+    ["c335d947.bdbee"]
   ]
 }, {
-  "id": "76c054d.5a0e72c",
+  "id": "cd23006e.d290a8",
   "type": "function",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "format",
-  "func": "if (msg.payload.length > 0) {\n    var data = msg.payload;\n    var result = [];\n    \n    data.forEach(function(el, i, arr){\n        result.push({id: el._id, \n        title: el.metadata.title.join(', '), \n        latLon: el.metadata.lbsLatLon, \n        thumbnail: el.metadata.edmPreview[0] || ''});\n    });\n}\n\nmsg.payload = result;\nmsg.topic = '/heritage/DATA';\nreturn msg;",
+  "func": "var result = [];\n\nif (msg.payload.length > 0) {\n    var data = msg.payload;\n\n    \n    data.forEach(function(el, i, arr){\n        result.push({id: el._id, \n        title: el.metadata.title.join(', '), \n        latLon: el.metadata.lbsLatLon, \n        thumbnail: el.metadata.edmPreview[0] || ''});\n    });\n}\n\nmsg.payload = result;\nmsg.topic = '/heritage/DATA';\nreturn msg;",
   "outputs": 1,
   "noerr": 0,
-  "x": 368.5,
-  "y": 130.5,
+  "x": 401,
+  "y": 164,
   "wires": [
-    ["686d767e.1507a8"]
+    ["72bd6712.3e786"]
   ]
 }, {
-  "id": "686d767e.1507a8",
+  "id": "72bd6712.3e786",
   "type": "json",
-  "z": "7b5a2ff1.d98e38",
+  "z": "64191aca.2586d4",
   "name": "",
-  "x": 539.5,
-  "y": 152,
+  "x": 572,
+  "y": 185.5,
   "wires": [
-    ["1ba69bf5.c41bc4"]
+    ["c335d947.bdbee", "c9675020.791b8"]
+  ]
+}, {
+  "id": "a9d0cd5e.847838",
+  "type": "inject",
+  "z": "64191aca.2586d4",
+  "name": "Thuis",
+  "topic": "/heritage/PING",
+  "payload": "[51.1169174, 5.2566289]",
+  "payloadType": "json",
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "x": 117.5,
+  "y": 317.5,
+  "wires": [
+    ["c335d947.bdbee"]
   ]
 }]

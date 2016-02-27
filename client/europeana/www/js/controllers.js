@@ -41,56 +41,16 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
+.controller('PlaylistsCtrl', ["$scope", "$rootScope","mqttService", function($scope, $rootScope, mqttService) {
   $scope.playlists = [];
-  $scope.clientId = "clientId-123";
-  var sendPosition = function(position){
-    p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
-    message = new Paho.MQTT.Message(p);
-    message.destinationName = "/heritage/PING";
-    mqttClient.send(message);
-  };
+  mqttService.setup("clientId-123", $scope);
+}])
 
-
-  var mqttClient = new Paho.MQTT.Client("88.198.207.11", 10001, $scope.clientId);
-
-  mqttClient.onConnectionLost =  function(responseObject) {
-    if (responseObject.errorCode !== 0) {
-      console.log("onConnectionLost:" + responseObject.errorMessage);
-      console.log("Reconnecting... [" + new Date() + "]");
-      mqttClient.connect({
-        userName:'heritage',
-        password: 'Nc7gmYGx',
-        onSuccess: function() {
-          mqttClient.subscribe("/heritage/DATA");
-          navigator.geolocation.getCurrentPosition(sendPosition);
-        }
-      });
-    }
-  };
-
-  mqttClient.onMessageArrived = function(message) {
-    $scope.$apply(function() {
-      $scope.playlists = JSON.parse(message.payloadString);
-    });
-  };
-
-  mqttClient.connect({
-    userName:'heritage',
-    password: 'Nc7gmYGx',
-
-    onSuccess: function() {
-      mqttClient.subscribe("/heritage/DATA");
-      navigator.geolocation.getCurrentPosition(sendPosition);
-    }
-  });
-
-
-
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-})
+.controller('PlaylistCtrl', ["$scope", "$stateParams", "mqttService", function($scope, $stateParams, mqttService) {
+  $scope.playlist = mqttService.playLists[mqttService.playLists.findIndex(function(element, index, array){
+    return element.id == $stateParams.playlistId;
+  })];
+}])
 
 .controller('MapController', function($scope, $ionicLoading) {
 
