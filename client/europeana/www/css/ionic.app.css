@@ -9738,6 +9738,13 @@ a.button {
 .nav-button {
   border-radius: 50%; }
 
+.scroll {
+  height: 100%; }
+
+#map {
+  width: 100%;
+  height: 100%; }
+
 .button .icon::before, .button.icon::before, .button.icon-left::before, .button.icon-right::before {
   font-size: 16px;
   line-height: 26px; }

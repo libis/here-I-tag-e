@@ -97,7 +97,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
       url: '/browse',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/browse.html',
+          controller:'MapController'
         }
       }
     })

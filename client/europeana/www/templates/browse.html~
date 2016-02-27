@@ -1,4 +1,4 @@
-ion-view view-title="Map">    
+<ion-view view-title="Map">    
   <ion-content ng-controller="MapController">
     <div id="map" data-tap-disabled="true"></div>
 </ion-content>
