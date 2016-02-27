@@ -1,10 +1,8 @@
 <ion-view view-title="Playlist">
   <ion-content class="padding location">
-    <h2>Title</h2>
-    <img src="http://getuikit.com/docs/images/placeholder_600x400.svg">
-    <p><i class="ion-pricetags"></i> tags</p>       
-
-  
-    
+    {{playlistId}}
+    <h2>{{playlist.title}}</h2>
+    <img src="{{playlist.thumbnail}}">
+    <p><i class="ion-pricetags"></i> tags</p>
   </ion-content>
 </ion-view>

@@ -22,6 +22,58 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
   });
 })
 
+.factory('PlaylistsService', function() {
+  var playlists=[];    
+  var sendPosition = function(position){
+    p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
+    message = new Paho.MQTT.Message(p);
+    message.destinationName = "/heritage/PING";
+    mqttClient.send(message);
+  };
+
+  var mqttClient = new Paho.MQTT.Client("88.198.207.11", 10001, "clientId-123457");
+
+  mqttClient.onConnectionLost =  function(responseObject) {
+    if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost:" + responseObject.errorMessage);
+      console.log("Reconnecting... [" + new Date() + "]");
+      mqttClient.connect({
+        userName:'heritage',
+        password: 'Nc7gmYGx',
+        onSuccess: function() {
+          mqttClient.subscribe("/heritage/DATA");
+          navigator.geolocation.getCurrentPosition(sendPosition);
+        }
+      });
+    }
+  };
+
+  mqttClient.onMessageArrived = function(message) {
+    
+      console.log(message);  
+      playlists = JSON.parse(message.payloadString);
+      $test = JSON.parse(message.payloadString);
+    
+  };
+
+  mqttClient.connect({
+    userName:'heritage',
+    password: 'Nc7gmYGx',
+
+    onSuccess: function() {
+      mqttClient.subscribe("/heritage/DATA");
+      navigator.geolocation.getCurrentPosition(sendPosition);
+    }
+  });
+
+  return {
+    playlists: playlists,
+    getPlaylists: function(index) {
+      return playlists[index]
+    }
+  }
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
@@ -57,10 +109,23 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
           controller: 'PlaylistsCtrl'
         }
       }
-    })
+    })  
 
-  
-
+    .state('app.playlists.detail', {
+        url: '/playlists/:playlist',
+        views: {
+            'menuContent': {
+              templateUrl: 'templates/playlist.html',
+              controller: 'PlaylistCtrl'
+            }
+        },
+        resolve: {
+            playlist: function($stateParams, PlaylistsService) {
+            return PlaylistsService.getPlaylist($stateParams.playlist)
+            }
+        }
+    });
+/*
   .state('app.single', {
     url: '/playlists/:playlistId',
     views: {
@@ -69,7 +134,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
         controller: 'PlaylistCtrl'
       }
     }
-  });
+  });*/
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });

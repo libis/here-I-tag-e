@@ -43,7 +43,7 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [];
-  $scope.clientId = "clientId-123";
+  $scope.clientId = "clientId-12345";
   var sendPosition = function(position){
     p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
     message = new Paho.MQTT.Message(p);
@@ -71,7 +71,10 @@ angular.module('starter.controllers', [])
 
   mqttClient.onMessageArrived = function(message) {
     $scope.$apply(function() {
+      console.log(message);  
       $scope.playlists = JSON.parse(message.payloadString);
+      $test = JSON.parse(message.payloadString);
+      
     });
   };
 
@@ -84,12 +87,15 @@ angular.module('starter.controllers', [])
       navigator.geolocation.getCurrentPosition(sendPosition);
     }
   });
-
-
-
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PlaylistsCtrl', function($scope, PlaylistsService) {
+  $scope.playlists = PlaylistsService.playlists
+})
+
+
+.controller('PlaylistCtrl', function($scope, playlist) {
+   $scope.playlist = playlist;
 })
 
 .controller('MapController', function($scope, $ionicLoading) {
