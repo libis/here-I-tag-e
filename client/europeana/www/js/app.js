@@ -23,7 +23,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
 })
 
 .factory('PlaylistsService', function() {
-  var playlists=[];    
+  var playlists=[];
   var sendPosition = function(position){
     p = JSON.stringify([position.coords.latitude, position.coords.longitude]);
     message = new Paho.MQTT.Message(p);
@@ -49,11 +49,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
   };
 
   mqttClient.onMessageArrived = function(message) {
-    
-      console.log(message);  
+
+      console.log(message);
       playlists = JSON.parse(message.payloadString);
       $test = JSON.parse(message.payloadString);
-    
+
   };
 
   mqttClient.connect({
@@ -110,23 +110,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
         }
       }
     })
-
-    .state('app.playlists.detail', {
-        url: '/playlists/:playlist',
-        views: {
-            'menuContent': {
-              templateUrl: 'templates/playlist.html',
-              controller: 'PlaylistCtrl'
-            }
-        },
-        resolve: {
-            playlist: function($stateParams, PlaylistsService) {
-            return PlaylistsService.getPlaylist($stateParams.playlist)
-            }
-        }
-    });
-/*
-  .state('app.single', {
+    
+   .state('app.single', {
     url: '/playlists/:playlistId',
     views: {
       'menuContent': {
@@ -134,7 +119,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ion-autocomplete'])
         controller: 'PlaylistCtrl'
       }
     }
-  });*/
+  });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 })

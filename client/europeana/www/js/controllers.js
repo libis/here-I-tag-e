@@ -43,7 +43,7 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistsCtrl', ["$scope", "$rootScope","mqttService", function($scope, $rootScope, mqttService) {
   $scope.playlists = [];
-  mqttService.setup("clientId-123", $scope);
+  mqttService.setup("clientId-" + Math.random() * (100000 - 1) + 1 , $scope);
 }])
 
 .controller('PlaylistCtrl', ["$scope", "$stateParams", "mqttService", function($scope, $stateParams, mqttService) {
