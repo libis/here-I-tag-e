@@ -1,0 +1,140 @@
+[{
+  "id": "4a6d576e.24586",
+  "type": "mongodb2",
+  "z": "6cfdcb7c.ae3864",
+  "uri": "mongodb://10.32.32.97:27027/heritage_development",
+  "name": "KRIS",
+  "options": "",
+  "parallelism": "-1"
+}, {
+  "id": "711f8626.896d8",
+  "type": "mqtt-broker",
+  "z": "6cfdcb7c.ae3864",
+  "broker": "www.celik.be",
+  "port": "1883",
+  "clientid": "",
+  "usetls": false,
+  "verifyservercert": true,
+  "compatmode": true,
+  "keepalive": "60",
+  "cleansession": true,
+  "willTopic": "",
+  "willQos": "0",
+  "willRetain": null,
+  "willPayload": "",
+  "birthTopic": "",
+  "birthQos": "0",
+  "birthRetain": null,
+  "birthPayload": ""
+}, {
+  "id": "e633913b.8dbf1",
+  "type": "mqtt in",
+  "z": "6cfdcb7c.ae3864",
+  "name": "ROUTE",
+  "topic": "/heritage/ROUTE",
+  "broker": "711f8626.896d8",
+  "x": 69.5,
+  "y": 88.5,
+  "wires": [
+    ["a4cb9167.d94cf8"]
+  ]
+}, {
+  "id": "50ca0b1.faeb2f4",
+  "type": "mqtt out",
+  "z": "6cfdcb7c.ae3864",
+  "name": "OUT",
+  "topic": "",
+  "qos": "",
+  "retain": "",
+  "broker": "711f8626.896d8",
+  "x": 591.5,
+  "y": 377,
+  "wires": []
+}, {
+  "id": "3ac1e3c5.eef4b4",
+  "type": "mongodb2 in",
+  "z": "6cfdcb7c.ae3864",
+  "service": "_ext_",
+  "configNode": "4a6d576e.24586",
+  "name": "KRIS",
+  "collection": "poi_groups",
+  "operation": "",
+  "x": 380.5,
+  "y": 96.5,
+  "wires": [
+    ["1d7548fa.63db5f"]
+  ]
+}, {
+  "id": "a4cb9167.d94cf8",
+  "type": "json",
+  "z": "6cfdcb7c.ae3864",
+  "name": "",
+  "x": 203.5,
+  "y": 93.5,
+  "wires": [
+    ["3d1d1ec9.695152"]
+  ]
+}, {
+  "id": "3d1d1ec9.695152",
+  "type": "function",
+  "z": "6cfdcb7c.ae3864",
+  "name": "build_query",
+  "func": "var latLon = msg.payload;\nvar newMsg = {};\nnewMsg.operation  = 'find.toArray';\nnewMsg.payload    = {};\n\nreturn newMsg;\n",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 287.5,
+  "y": 164.5,
+  "wires": [
+    ["3ac1e3c5.eef4b4"]
+  ]
+}, {
+  "id": "1d7548fa.63db5f",
+  "type": "json",
+  "z": "6cfdcb7c.ae3864",
+  "name": "",
+  "x": 470.5,
+  "y": 33.5,
+  "wires": [
+    ["497e3ecb.018b68"]
+  ]
+}, {
+  "id": "f6de30cb.5bdde",
+  "type": "debug",
+  "z": "6cfdcb7c.ae3864",
+  "name": "",
+  "active": true,
+  "console": "false",
+  "complete": "false",
+  "x": 588.5,
+  "y": 123,
+  "wires": []
+}, {
+  "id": "a5aa54e7.6786d8",
+  "type": "inject",
+  "z": "6cfdcb7c.ae3864",
+  "name": "ROUTE",
+  "topic": "/heritage/ROUTE",
+  "payload": "[10,10]",
+  "payloadType": "json",
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "x": 98.5,
+  "y": 379.5,
+  "wires": [
+    ["50ca0b1.faeb2f4"]
+  ]
+}, {
+  "id": "497e3ecb.018b68",
+  "type": "function",
+  "z": "6cfdcb7c.ae3864",
+  "name": "format",
+  "func": "var result = [];\n\nif (msg.payload.length > 0) {\n    JSON.parse(msg.payload).forEach(function(el,i,ar){\n       result.push({\n           id: el._id,\n           name: el.name,\n           track: el.box.coordinates\n       }) \n    });\n}\n\nmsg.payload = result;\nmsg.topic = '/heritage/ROUTE_DATA';\nreturn msg;",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 366.5,
+  "y": 273.5,
+  "wires": [
+    ["50ca0b1.faeb2f4", "f6de30cb.5bdde"]
+  ]
+}]
